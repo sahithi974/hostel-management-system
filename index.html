@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hostel Management System</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6f9;
+}
+
+/* TOP NAVBAR */
+
+.topbar{
+height:60px;
+background:#2c3e50;
+color:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+}
+
+.topbar a{
+color:white;
+margin-left:20px;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:60px;
+left:0;
+width:220px;
+height:100%;
+background:#1f2d3d;
+padding-top:20px;
+}
+
+.sidebar button{
+display:block;
+width:100%;
+padding:12px;
+border:none;
+background:none;
+color:white;
+text-align:left;
+cursor:pointer;
+}
+
+.sidebar button:hover{
+background:#34495e;
+}
+
+/* CONTENT AREA */
+
+.content{
+margin-left:220px;
+margin-top:60px;
+padding:20px;
+}
+
+/* DASHBOARD CARDS */
+
+.cards{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.card{
+flex:1;
+min-width:180px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card img{
+width:40px;
+}
+
+/* PAGE CONTROL */
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border:1px solid #ccc;
+text-align:center;
+}
+
+input{
+padding:8px;
+margin:5px;
+}
+
+button.submit{
+background:#3498db;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:5px;
+cursor:pointer;
+}
+
+.hotelimg{
+width:300px;
+border-radius:10px;
+margin:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+<h2>🏨 Hostel Management System</h2>
+
+<div>
+<a href="#" onclick="showPage('home')">Home</a>
+<a href="#" onclick="showPage('about')">About</a>
+<a href="#" onclick="showPage('contact')">Contact</a>
+<a href="#" onclick="showPage('info')">Info</a>
+</div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('addStudent')">Add Student</button>
+<button onclick="showPage('viewStudents')">View Students</button>
+<button onclick="showPage('allocateRoom')">Allocate Room</button>
+<button onclick="showPage('fees')">Fees</button>
+<button onclick="showPage('complaints')">Complaints</button>
+<button onclick="showPage('rooms')">Rooms</button>
+
+</div>
+
+<div class="content">
+
+<!-- HOME PAGE -->
+
+<div id="home" class="page active">
+
+<h2>Welcome to Our Hostel</h2>
+
+<img class="hotelimg" src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5">
+<img class="hotelimg" src="https://images.unsplash.com/photo-1560448075-bb4caa6d9a24">
+<img class="hotelimg" src="https://images.unsplash.com/photo-1590490360182-c33d57733427">
+
+<h3>Hostel Services</h3>
+
+<ul>
+<li>Breakfast: 7:00 AM – 8:30 AM</li>
+<li>Lunch: 12:30 PM – 2:00 PM</li>
+<li>Evening Snacks: 4:00 PM – 5:00 PM</li>
+<li>Dinner: 7:30 PM – 9:00 PM</li>
+<li>24/7 Water Supply</li>
+<li>WiFi Facility</li>
+<li>Study Hall</li>
+<li>Security and CCTV Monitoring</li>
+</ul>
+
+<h3>Instructions to Join Hostel</h3>
+
+<ul>
+<li>Students must submit valid college ID.</li>
+<li>Hostel admission form must be completed.</li>
+<li>Room will be allocated after fee payment.</li>
+<li>Students must follow hostel discipline.</li>
+</ul>
+
+<h3>Hostel Rules</h3>
+
+<ul>
+<li>No electric cooking items allowed.</li>
+<li>No heaters or induction stoves.</li>
+<li>No alcohol or drugs.</li>
+<li>No fire or flame items.</li>
+<li>Maintain cleanliness in rooms.</li>
+<li>Silence must be maintained after 10 PM.</li>
+</ul>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="page">
+
+<h2>Dashboard</h2>
+
+<div class="cards">
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1670/1670075.png">
+<h3 id="totalStudents">0</h3>
+<p>Total Students</p>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/139/139899.png">
+<h3 id="occupiedRooms">0</h3>
+<p>Occupied Rooms</p>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png">
+<h3 id="complaintCount">0</h3>
+<p>Complaints</p>
+</div>
+
+<div class="card">
+<img src="https://cdn-icons-png.flaticon.com/512/747/747310.png">
+<h3 id="availableRooms">0</h3>
+<p>Available Rooms</p>
+</div>
+
+</div>
+
+<br><br>
+
+<canvas id="myChart" height="100"></canvas>
+
+</div>
+
+<!-- ADD STUDENT -->
+
+<div id="addStudent" class="page">
+
+<h2>Add Student</h2>
+
+<input id="sid" placeholder="Student ID">
+<input id="name" placeholder="Name">
+<input id="dept" placeholder="Department">
+
+<button class="submit" onclick="addStudent()">Add</button>
+
+</div>
+
+<!-- VIEW STUDENTS -->
+
+<div id="viewStudents" class="page">
+
+<h2>Students</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Dept</th>
+<th>Room</th>
+</tr>
+</thead>
+
+<tbody id="studentTable"></tbody>
+
+</table>
+
+</div>
+
+<!-- ALLOCATE ROOM -->
+
+<div id="allocateRoom" class="page">
+
+<h2>Allocate Room</h2>
+
+<input id="roomSid" placeholder="Student ID">
+
+<button class="submit" onclick="allocateRoom()">Allocate</button>
+
+<p id="roomResult"></p>
+
+</div>
+
+<!-- FEES -->
+
+<div id="fees" class="page">
+
+<h2>Pay Fees</h2>
+
+<input id="feeSid" placeholder="Student ID">
+
+<button class="submit" onclick="payFees()">Submit Payment</button>
+
+<h3>Fees Details</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Student ID</th>
+<th>Student Name</th>
+<th>Fees Status</th>
+</tr>
+</thead>
+
+<tbody id="feesTable"></tbody>
+
+</table>
+
+</div>
+
+<!-- COMPLAINTS -->
+
+<div id="complaints" class="page">
+
+<h2>Add Complaint</h2>
+
+<input id="csid" placeholder="Student ID">
+<input id="ctext" placeholder="Complaint">
+
+<button class="submit" onclick="addComplaint()">Submit</button>
+
+</div>
+
+<!-- ROOMS -->
+
+<div id="rooms" class="page">
+
+<h2>Rooms</h2>
+
+<div id="roomList"></div>
+
+</div>
+
+<!-- ABOUT -->
+
+<div id="about" class="page">
+<h2>About</h2>
+<p>This system helps manage hostel rooms, students, and complaints.</p>
+</div>
+
+<!-- CONTACT -->
+
+<div id="contact" class="page">
+<h2>Contact</h2>
+<p>Email: hostel@email.com</p>
+</div>
+
+<!-- INFO -->
+
+<div id="info" class="page">
+<h2>Info</h2>
+<p>Version 1.0 Hostel Management System</p>
+</div>
+
+</div>
+
+<script>
+
+let students=[];
+let complaints=[];
+let rooms=[];
+
+for(let i=101;i<=110;i++){
+rooms.push({roomNo:i,occupied:false});
+}
+
+function showPage(page){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+document.getElementById(page).classList.add("active");
+
+if(page==="viewStudents") loadStudents();
+if(page==="rooms") loadRooms();
+if(page==="fees") loadFees();
+
+}
+
+function addStudent(){
+
+let id=document.getElementById("sid").value;
+let name=document.getElementById("name").value;
+let dept=document.getElementById("dept").value;
+
+students.push({id,name,dept,room:null,fees:false});
+
+updateDashboard();
+
+alert("Student Added");
+
+}
+
+function loadStudents(){
+
+let out="";
+
+students.forEach(s=>{
+
+out+=`<tr>
+<td>${s.id}</td>
+<td>${s.name}</td>
+<td>${s.dept}</td>
+<td>${s.room || "-"}</td>
+</tr>`;
+
+});
+
+document.getElementById("studentTable").innerHTML=out;
+
+}
+
+function allocateRoom(){
+
+let sid=document.getElementById("roomSid").value;
+
+let student=students.find(s=>s.id===sid);
+
+let room=rooms.find(r=>!r.occupied);
+
+if(student && room){
+
+room.occupied=true;
+student.room=room.roomNo;
+
+document.getElementById("roomResult").innerText="Allocated Room "+room.roomNo;
+
+updateDashboard();
+
+}
+
+}
+
+function payFees(){
+
+let sid=document.getElementById("feeSid").value;
+
+let student=students.find(s=>s.id===sid);
+
+if(student){
+student.fees=true;
+}
+
+loadFees();
+
+}
+
+function loadFees(){
+
+let out="";
+
+students.forEach(s=>{
+
+out+=`
+<tr>
+<td>${s.id}</td>
+<td>${s.name}</td>
+<td>${s.fees ? "Paid" : "No"}</td>
+</tr>
+`;
+
+});
+
+document.getElementById("feesTable").innerHTML=out;
+
+}
+
+function addComplaint(){
+
+let sid=document.getElementById("csid").value;
+let text=document.getElementById("ctext").value;
+
+complaints.push({sid,text});
+
+updateDashboard();
+
+}
+
+function loadRooms(){
+
+let out="";
+
+rooms.forEach(r=>{
+
+out+=`Room ${r.roomNo} - ${r.occupied?"Occupied":"Available"}<br>`;
+
+});
+
+document.getElementById("roomList").innerHTML=out;
+
+}
+
+function updateDashboard(){
+
+document.getElementById("totalStudents").innerText=students.length;
+
+document.getElementById("complaintCount").innerText=complaints.length;
+
+let occupied=rooms.filter(r=>r.occupied).length;
+
+document.getElementById("occupiedRooms").innerText=occupied;
+
+document.getElementById("availableRooms").innerText=rooms.length-occupied;
+
+updateChart();
+
+}
+
+function updateChart(){
+
+const ctx=document.getElementById("myChart");
+
+new Chart(ctx,{
+type:"bar",
+data:{
+labels:["Students","Occupied Rooms","Complaints"],
+datasets:[{
+label:"Hostel Stats",
+data:[
+students.length,
+rooms.filter(r=>r.occupied).length,
+complaints.length
+]
+}]
+}
+});
+
+}
+
+updateChart();
+
+</script>
+
+</body>
+</html>
